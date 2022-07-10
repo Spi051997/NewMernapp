@@ -9,6 +9,22 @@ dbConnection;
 const app=express();
 dotenv.config();
 
+
+// for Testing
+
+// app.use('/api/chat',(req,res)=>{
+//       res.send([
+//         {
+//             id:1,
+//             Name:"Shubham"
+//         },
+//         {
+//             id:2,
+//             Name:"Purvi"
+//         }
+//       ])
+// })
+
 app.use(express.json())
 app.use('/api/user',userRoutes) // to accept the json data
 app.use('/api/chat',chatRoutes);
