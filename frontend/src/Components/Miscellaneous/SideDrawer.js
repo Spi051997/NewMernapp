@@ -17,6 +17,7 @@ import {
   MenuDivider,
   Avatar,
 } from "@chakra-ui/react";
+import {useNavigate} from 'react-router-dom'
 const SideDrawer = () => {
   const { user } = ChatState();
 
@@ -24,6 +25,13 @@ const SideDrawer = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setloadingChat] = useState();
+
+  const navigate=useNavigate();
+  const handlelogout=()=>{
+    localStorage.removeItem("userInfo");
+    navigate("/")
+
+  }
   return (
     <div>
       <Box
@@ -66,11 +74,11 @@ const SideDrawer = () => {
             </MenuButton>
             <MenuList>
               <MenuItem>
-            <MyProfile>
+            <MyProfile user={user}>
                 My Profile
             </MyProfile>
               </MenuItem>
-              <MenuItem>Log MenuOptionGroup</MenuItem>
+              <MenuItem onClick={handlelogout}>Log out</MenuItem>
             </MenuList>
             {/* <MenuItem>Create a Copy</MenuItem>
     <MenuItem>Mark as Draft</MenuItem> */}
