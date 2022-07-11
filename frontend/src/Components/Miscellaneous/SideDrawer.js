@@ -1,7 +1,22 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Search2Icon, BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../Context/ChatProvider";
+import UserList from "./UserList";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/hooks";
 import MyProfile from "./MyProfile";
+import ChatLoading from "./ChatLoading";
 import {
   Text,
   Box,
@@ -17,7 +32,7 @@ import {
   MenuDivider,
   Avatar,
 } from "@chakra-ui/react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 const SideDrawer = () => {
   const { user } = ChatState();
 
@@ -26,10 +41,54 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setloadingChat] = useState();
 
-  const navigate=useNavigate();
-  const handlelogout=()=>{
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+
+  const navigate = useNavigate();
+  const handlelogout = () => {
     localStorage.removeItem("userInfo");
-    navigate("/")
+    navigate("/");
+  };
+
+  const toast = useToast();
+  const handleSearch = async () => {
+    if (!search) {
+      toast({
+        title: "Please Enter something in search",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
+
+      setLoading(false);
+      setSearchResult(data);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the Search Results",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
+  const  accessChat=async(userid)=>{
 
   }
   return (
@@ -44,7 +103,13 @@ const SideDrawer = () => {
         borderWidth="2px"
       >
         <Tooltip hasArrow label="Search User" aria-label="A tooltip">
-          <Button variant="ghost" display="flex" justifyContent="space-around">
+          <Button
+            ref={btnRef}
+            variant="ghost"
+            display="flex"
+            justifyContent="space-around"
+            onClick={onOpen}
+          >
             <Search2Icon />
             <Text d={{ base: "none ", md: "flex" }} px="4">
               Search user
@@ -74,9 +139,7 @@ const SideDrawer = () => {
             </MenuButton>
             <MenuList>
               <MenuItem>
-            <MyProfile user={user}>
-                My Profile
-            </MyProfile>
+                <MyProfile user={user}>My Profile</MyProfile>
               </MenuItem>
               <MenuItem onClick={handlelogout}>Log out</MenuItem>
             </MenuList>
@@ -85,6 +148,52 @@ const SideDrawer = () => {
           </Menu>
         </div>
       </Box>
+
+      <Drawer
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Search user</DrawerHeader>
+
+          <DrawerBody>
+            <Box
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+              pb={2}
+            >
+              <Input
+                placeholder="Search"
+                mr={2}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button onClick={handleSearch}>Go</Button>
+            </Box>
+            {loading ?(
+              <ChatLoading/>
+            ):(
+              searchResult?.map(user=>(
+                <UserList  key={user._id} user={user}
+                handleFunction={() => accessChat(user._id)} />
+               ))
+              
+            )}
+          </DrawerBody>
+
+          <DrawerFooter>
+            {/* <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button> */}
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };
