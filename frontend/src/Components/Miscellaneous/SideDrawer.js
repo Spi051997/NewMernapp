@@ -13,6 +13,7 @@ import {
   DrawerCloseButton,
   Input,
   useToast,
+  Spinner
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import MyProfile from "./MyProfile";
@@ -34,13 +35,14 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 const SideDrawer = () => {
-  const { user } = ChatState();
+  
 
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingChat, setloadingChat] = useState();
-
+  const [loadingChat, setLoadingChat] = useState();
+  const { user, setSelectedChat ,chats,
+    setChats} = ChatState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
@@ -88,9 +90,34 @@ const SideDrawer = () => {
     }
   };
 
-  const  accessChat=async(userid)=>{
+  const accessChat = async (userId) => {
+    console.log(userId);
 
-  }
+    try {
+      setLoadingChat(true);
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(`/api/chat`, { userId }, config);
+
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      setSelectedChat(data);
+      setLoadingChat(false);
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
   return (
     <div>
       <Box
@@ -184,6 +211,8 @@ const SideDrawer = () => {
                ))
               
             )}
+
+           {loadingChat && <Spinner ml="auto" d="flex" />} 
           </DrawerBody>
 
           <DrawerFooter>
