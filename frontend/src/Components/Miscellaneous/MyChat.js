@@ -7,11 +7,12 @@ import { AddIcon } from "@chakra-ui/icons";
 import {getSender}  from '../config/ChatLogics'
 import ChatLoading from "./ChatLoading";
 import GroupModel from "./GroupModel";
-const MyChat = () => {
+const MyChat = ({fetchagain   }) => {
   const [loggeduser, setloggeduser] = useState();
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
+
 
   const fetchChats = async () => {
     console.log(user._id);
@@ -40,7 +41,7 @@ const MyChat = () => {
     setloggeduser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
     // eslint-disable-next-line
-  }, []);
+  }, [fetchagain]);
   return (
     <>
       <Box
