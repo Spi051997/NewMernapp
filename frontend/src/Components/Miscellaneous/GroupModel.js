@@ -13,7 +13,9 @@ import {
   FormControl,
   Input,
   Spinner,
+  Box
 } from "@chakra-ui/react";
+import UserBadgeItem from "./UserBadgeItem";
 import { ChatState } from "../../Context/ChatProvider";
 import axios from "axios";
 import UserList from "./UserList";
@@ -61,6 +63,11 @@ const GroupModel = ({ children }) => {
     }
   };
   const handlesubmit = () => {};
+  // handle delete for grp
+  const handeDelete=(deleuser)=>{
+    setselectedUsers(selectedUsers.filter(sel=> sel._id!==deleuser._id))
+  };
+  console.log(handeDelete)
   const handeGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
       toast({
@@ -72,7 +79,7 @@ const GroupModel = ({ children }) => {
       });
       return;
     }
-     setselectedUsers([...selectedUsers,userToAdd])
+    setselectedUsers([...selectedUsers, userToAdd]);
   };
   return (
     <>
@@ -111,9 +118,11 @@ const GroupModel = ({ children }) => {
                 onChange={(e) => handlesearch(e.target.value)}
               />
             </FormControl>
-            {/* {selectedUsers.map((user)=>(
-
-            ))} */}
+            <Box    w='100%' display='flex' flexWrap="wrap">
+            {selectedUsers.map((user) => (
+              <UserBadgeItem key={user._id} user={user} handlefuntion={()=>handeDelete(user)} />
+            ))}
+            </Box>
             {loading ? (
               <Spinner />
             ) : (
