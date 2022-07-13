@@ -13,7 +13,7 @@ import {
   FormControl,
   Input,
   Spinner,
-  Box
+  Box,
 } from "@chakra-ui/react";
 import UserBadgeItem from "./UserBadgeItem";
 import { ChatState } from "../../Context/ChatProvider";
@@ -60,14 +60,66 @@ const GroupModel = ({ children }) => {
         isClosable: true,
         position: "bottom-left",
       });
+      return;
     }
   };
-  const handlesubmit = () => {};
-  // handle delete for grp
-  const handeDelete=(deleuser)=>{
-    setselectedUsers(selectedUsers.filter(sel=> sel._id!==deleuser._id))
+  const handlesubmit = async () => {
+    if (!groupChatName || !selectedUsers) {
+      toast({
+        title: "Please fill all the fields",
+        // description: "warning",
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        `api/chat/group`,
+        {
+          name: groupChatName,
+          users: JSON.stringify(selectedUsers.map((u) => u._id)),
+        },
+        config
+      );
+
+      setChats([data, ...chats]);
+      onClose();
+      toast({
+        title: "New Group Chat Created",
+        // description:"success",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (error) {
+      toast({
+        title: "Error while creating Group Chat",
+        // description: "warning",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+
+      return;
+    }
   };
-  console.log(handeDelete)
+  // handle delete for grp
+  const handeDelete = (deleuser) => {
+    setselectedUsers(selectedUsers.filter((sel) => sel._id !== deleuser._id));
+  };
+  // console.log(handeDelete)
   const handeGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
       toast({
@@ -118,10 +170,14 @@ const GroupModel = ({ children }) => {
                 onChange={(e) => handlesearch(e.target.value)}
               />
             </FormControl>
-            <Box    w='100%' display='flex' flexWrap="wrap">
-            {selectedUsers.map((user) => (
-              <UserBadgeItem key={user._id} user={user} handlefuntion={()=>handeDelete(user)} />
-            ))}
+            <Box w="100%" display="flex" flexWrap="wrap">
+              {selectedUsers.map((user) => (
+                <UserBadgeItem
+                  key={user._id}
+                  user={user}
+                  handlefuntion={() => handeDelete(user)}
+                />
+              ))}
             </Box>
             {loading ? (
               <Spinner />
