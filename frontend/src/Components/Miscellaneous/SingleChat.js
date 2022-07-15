@@ -7,7 +7,7 @@ import { getSender, getSenderFull } from "../config/ChatLogics";
 import UpdateGroupModel from "./UpdateGroupModel";
 import MyProfile from "./MyProfile";
 
-const SingleChat = ({ fetchagain, setfetchagain }) => {
+const SingleChat = ({ fetchagain, setfethagin }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
   console.log(selectedChat);
   return (
@@ -35,7 +35,7 @@ const SingleChat = ({ fetchagain, setfetchagain }) => {
               <>{selectedChat.chatName.toUpperCase()}
               <UpdateGroupModel 
                 fetchagain={fetchagain} 
-                setfetchagain={setfetchagain}
+                setfethagin={setfethagin}
                 />
               
               </>
