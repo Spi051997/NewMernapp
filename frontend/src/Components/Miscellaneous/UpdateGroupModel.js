@@ -21,7 +21,7 @@ import { ViewIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../Context/ChatProvider";
 import UserList from "./UserList";
 import axios from "axios";
-const UpdateGroupModel = ({ fetchagain, setfethagin }) => {
+const UpdateGroupModel = ({ fetchagain, setfethagin,fetchmessages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     selectedChat,
@@ -72,7 +72,7 @@ const UpdateGroupModel = ({ fetchagain, setfethagin }) => {
 
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setfethagin(!setfethagin);
-      //   fetchMessages();
+      fetchmessages()
       setloading(false);
     } catch (error) {
       toast({
@@ -213,7 +213,7 @@ const UpdateGroupModel = ({ fetchagain, setfethagin }) => {
   };
 
   return (
-    <div>
+    <div >
       <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
@@ -285,7 +285,7 @@ const UpdateGroupModel = ({ fetchagain, setfethagin }) => {
             >
               Leave Group
             </Button>
-          </ModalFooter>
+          </ModalFooter>  
         </ModalContent>
       </Modal>
     </div>
