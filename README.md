@@ -14,4 +14,7 @@ Database: Mongo DB
 ##Creating Group Chat
 ![image](https://user-images.githubusercontent.com/97428194/179452160-5d5954d4-2d73-4384-a6f0-4af924830c31.png)
 
+## Rename Group
+![image](https://user-images.githubusercontent.com/97428194/179452380-3785d1b9-ebd7-43a9-a919-5d23cfc5c2fe.png)
+
 
