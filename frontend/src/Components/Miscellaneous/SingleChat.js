@@ -8,19 +8,22 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ChatState } from "../../Context/ChatProvider";
-import { IconButton } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import UpdateGroupModel from "./UpdateGroupModel";
 import MyProfile from "./MyProfile";
 import ScrollableChat from "./ScrollableChat";
 import axios from "axios";
+import io from 'socket.io-client'
 import './Css/Appp.css';
+
+
+const ENDPOINT="http://localhost:5000";
+var socket,selectedChatCompare;
 const SingleChat = ({ fetchagain, setfethagin }) => {
   const [message, setmessage] = useState([]);
   const [loading, setloading] = useState(false);
   const [newMessage, setNewMessage] = useState();
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const { user, selectedChat } = ChatState();
 
   const toast = useToast();
 
@@ -62,6 +65,7 @@ const SingleChat = ({ fetchagain, setfethagin }) => {
 
     useEffect(()=>{
       fetchmessages();
+       // eslint-disable-next-line
     },[selectedChat])
 
   const sendmessage = async (event) => {
@@ -99,6 +103,10 @@ const SingleChat = ({ fetchagain, setfethagin }) => {
       }
     }
   };
+
+  useEffect(()=>{
+     socket=io(ENDPOINT)
+  },[]);
   const typinghandlerr = (e) => {
     setNewMessage(e.target.value);
   };

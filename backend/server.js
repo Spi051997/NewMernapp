@@ -12,22 +12,6 @@ dbConnection;
 const app=express();
 dotenv.config();
 
-
-// for Testing
-
-// app.use('/api/chat',(req,res)=>{
-//       res.send([
-//         {
-//             id:1,
-//             Name:"Shubham"
-//         },
-//         {
-//             id:2,
-//             Name:"Purvi"
-//         }
-//       ])
-// })
-
 app.use(express.json())
 app.use('/api/user',userRoutes) // to accept the json data
 app.use('/api/chat',chatRoutes);
@@ -39,7 +23,20 @@ app.use(errorHandler);
 
 const PORT=process.env.PORT;
 
-app.listen(PORT,()=>
+ const server=app.listen(PORT,()=>
 {
     console.log(`Server is up at ${PORT}`.yellow.bold)
 })
+
+const io=require('socket.io')(server,{
+     pingTimeout:60000,
+    cors:{
+        origin:"http://localhost:3000"
+    },
+});
+
+// create a connection
+io.on("connection",(socket)=>{
+    console.log(`Connected to socket.io ${socket}`)
+})
+

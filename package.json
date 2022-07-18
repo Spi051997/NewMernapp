@@ -1,0 +1,22 @@
+{
+  "name": "shubham",
+  "version": "1.0.0",
+  "description": "Talk back(In developement)\r Talk back  is a Full Stack Chatting App.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Spi051997/NewMernapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Spi051997/NewMernapp/issues"
+  },
+  "homepage": "https://github.com/Spi051997/NewMernapp#readme",
+  "dependencies": {
+    "socket.io": "^4.5.1"
+  }
+}

@@ -27,11 +27,7 @@ const UpdateGroupModel = ({ fetchagain, setfethagin,fetchmessages }) => {
     selectedChat,
     setSelectedChat,
     user,
-    setUser,
-    notification,
-    setNotification,
-    chats,
-    setChats,
+    
   } = ChatState();
 
   const [groupChatName, setGroupChatName] = useState();

@@ -1,12 +1,7 @@
 import React from "react";
-import ScrollableFeed from "react-scrollable-feed";
+// import ScrollableFeed from "react-scrollable-feed";
 import {
-  Box,
-  Text,
-  Spinner,
-  FormControl,
-  Input,
-  useToast,
+  
   Tooltip,
   Avatar,
 } from "@chakra-ui/react";
@@ -16,7 +11,7 @@ const ScrollableChat = ({ message }) => {
   const { user } = ChatState();
   return (
     <div>
-      <ScrollableFeed>
+      {/* <ScrollableFeed> */}
         {message &&
           message.map((m, i) => (
             <div style={{ display: "flex" }} key={m._id}>
@@ -50,7 +45,7 @@ const ScrollableChat = ({ message }) => {
               }}>{m.content}</span>
             </div>
           ))}
-      </ScrollableFeed>
+      {/* </ScrollableFeed> */}
     </div>
   );
 };
