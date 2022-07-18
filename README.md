@@ -13,6 +13,8 @@ Database: Mongo DB
 
 ## Create Group
 ![image](https://user-images.githubusercontent.com/97428194/179248753-d1b7c5a1-c70c-46c9-a4af-442bffca1651.png)
+
+## Creating Individual Chat(between Single Users)
 ![image](https://user-images.githubusercontent.com/97428194/179451937-4f6dd67e-e69e-4150-a39f-5b99ad6bacec.png)
 
 ## Creating Group Chat
